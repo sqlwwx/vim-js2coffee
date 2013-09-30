@@ -22,7 +22,7 @@ class VimJS2CoffeeTests(unittest.TestCase):
         contents = ["var example = function() {\n", "    console.log('This is a different example');\n", "}"]
         return_result = sut.get_coffee_from_js_buffer_contents(contents)
         expected_result = ['example = ->', '  console.log "This is a different example"']
-        self.assertEqual(expected_result, return_result)
+        self.assertEqual(return_result, expected_result)
 
     def test_get_coffee_from_js_buffer_contents_raises_error_when_given_invalid_input(self):
         contents = ["va = oiuewf{}"]
@@ -30,10 +30,10 @@ class VimJS2CoffeeTests(unittest.TestCase):
             sut.get_coffee_from_js_buffer_contents(contents)
 
     def test_write_js_to_file_writes_correct_contents_to_desired_file(self):
-        contents = ["var example = function() {\n", "    console.log('this is an example');\n", "}"]
+        contents = ["var example = function() {", "    console.log('this is an example');", "}"]
         sut.write_buffer_contents_to_file(JS_FILE, contents)
         with open(JS_FILE, "r") as f:
-            self.assertEqual(f.read(), "".join(contents))
+            self.assertEqual(f.readlines(), [line + "\n" for line in contents])
 
     def test_run_js_to_coffee_on_js_file_creates_a_proper_coffee_file_when_given_valid_input(self):
         contents = ["var example = function() {\n", "    console.log('This is another example');\n", "}"]
@@ -103,10 +103,10 @@ class VimCoffee2JSTests(unittest.TestCase):
             sut.get_js_from_coffee_buffer_contents(contents)
 
     def test_write_buffer_contents_to_file_writes_correct_contents_to_desired_file_with_valid_coffee_script(self):
-        contents = ['for name in ["Toran", "Matt", "Brandon", "Joel"]\n', "  console.log('The name' + name)"]
+        contents = ['for name in ["Toran", "Matt", "Brandon", "Joel"]', "  console.log('The name' + name)"]
         sut.write_buffer_contents_to_file(COFFEE_FILE, contents)
         with open(COFFEE_FILE, "r") as f:
-            self.assertEqual(f.read(), "".join(contents))
+            self.assertEqual(f.readlines(), [line + "\n" for line in contents])
 
     def test_run_coffee_to_js_on_coffee_file_creates_a_proper_js_file_when_given_valid_input(self):
         contents = ["for name in ['Toran', 'Matt']\n", "  console.log('The name' + name)"]
