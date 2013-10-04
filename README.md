@@ -10,18 +10,23 @@ JavaScript to CoffeeScript and CoffeeScript to JavaScript from the comfort of yo
 The recommended installation method is vundle <https://github.com/gmarik/vundle>.
 installation should also work via pathogen <https://github.com/tpope/vim-pathogen>
 
-REQUIREMENTS
-============
+## REQUIREMENTS
 
 You need a VIM version that was compiled with python support, which is typical
 for most distributions on Linux/Mac.  You can check this by running
 ``vim --version | grep +python``
 if you get a hit you are in business.
 
-You will need to npm install `js2coffee` and `coffee-script` to preform the actual compilation
+You will need to npm install `js2coffee` and `coffee-script` to preform the actual compilation. Make
+sure that you have access to both `js2coffee` and `coffee` from your shell in order for this plugin
+to be able to function.
 
-Usage
-=====
+### Note for OSX users
+It seems that even after globaly npm installing js2coffee it will still not be on the path as a
+default. Extending the PATH with `export PATH=/usr/local/share/npm/bin:$PATH` should get you started.
+
+
+## Usage
 
 The plugin provides four commands:
 
