@@ -5,10 +5,22 @@ JavaScript to CoffeeScript and CoffeeScript to JavaScript from the comfort of yo
 ![vim-js2coffee-demo](https://f.cloud.github.com/assets/4416952/1234714/3cc31b68-2987-11e3-90e3-b6bccc89f7eb.gif)
 
 
-## INSTALLATION
+INSTALLATION
+============
 
-The recommended installation method is vundle <https://github.com/gmarik/vundle>.
-installation should also work via pathogen <https://github.com/tpope/vim-pathogen>
+Use your plugin manager of choice.
+
+- [Pathogen](https://github.com/tpope/vim-pathogen)
+  - `git clone https://github.com/JarrodCTaylor/vim-js2coffee ~/.vim/bundle/vim-js2coffee`
+- [Vundle](https://github.com/gmarik/vundle)
+  - Add `Bundle 'https://github.com/JarrodCTaylor/vim-js2coffee'` to .vimrc
+  - Run `:BundleInstall`
+- [NeoBundle](https://github.com/Shougo/neobundle.vim)
+  - Add `NeoBundle 'https://github.com/JarrodCTaylor/vim-js2coffee'` to .vimrc
+  - Run `:NeoBundleInstall`
+- [vim-plug](https://github.com/junegunn/vim-plug)
+  - Add `Plug 'https://github.com/JarrodCTaylor/vim-js2coffee'` to .vimrc
+  - Run `:PlugInstall`
 
 ## REQUIREMENTS
 
