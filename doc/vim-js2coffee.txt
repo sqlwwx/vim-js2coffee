@@ -1,6 +1,4 @@
-*vim-python-test-runner.txt* A Django aware testsrunner for vim.
-Allows you to run Django unit tests that require database interactions, with
-django-nose as well as unit tests outside of a Django project with nosetests.
+*vim-js2coffee.txt*
 
 ===============================================================================
 CONTENTS                                                 *test-runner-contents*
@@ -10,11 +8,6 @@ CONTENTS                                                 *test-runner-contents*
     2. Installation .............................. |vim-js2coffee-installation|
     3. Requirements .............................. |vim-js2coffee-requirements|
     4. Usage ............................................ |vim-js2coffee-usage|
-    5. Config File .................................. |test-runner-config-file|
-        5.1 Config file contents........................ |config-file-contents|
-        5.2 Outside of Django................. |plugin-usage-outside-of-django|
-    6. Licence .......................................... |test-runner-licence|
-    7. Bugs ................................................ |test-runner-bugs|
 ===============================================================================
 1. Intro                                                  *vim-js2coffee-intro*
 
