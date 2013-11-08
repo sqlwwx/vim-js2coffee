@@ -5,8 +5,7 @@ JavaScript to CoffeeScript and CoffeeScript to JavaScript from the comfort of yo
 ![vim-js2coffee-demo](https://f.cloud.github.com/assets/4416952/1234714/3cc31b68-2987-11e3-90e3-b6bccc89f7eb.gif)
 
 
-INSTALLATION
-============
+## INSTALLATION
 
 Use your plugin manager of choice.
 
