@@ -22,6 +22,12 @@ class VimJS2CoffeeTests(unittest.TestCase):
         expected_result = ['example = ->', '  console.log "This is a different example"']
         self.assertEqual(return_result, expected_result)
 
+    def test_works_with_nested_quotes(self):
+        contents = ["var example = function() {\n", "    console.log(\"This is a 'different' example\");\n", "}"]
+        return_result = sut.get_coffee_from_js_buffer_contents(contents)
+        expected_result = ['example = ->', '  console.log "This is a \"different\" example"']
+        self.assertEqual(return_result, expected_result)
+
     def test_get_coffee_from_js_buffer_contents_raises_error_when_given_invalid_input(self):
         contents = ["va = oiuewf{}"]
         with self.assertRaises(Exception):
