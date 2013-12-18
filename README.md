@@ -32,10 +32,6 @@ You will need to npm install `js2coffee` and `coffee-script` to preform the actu
 sure that you have access to both `js2coffee` and `coffee` from your shell in order for this plugin
 to be able to function.
 
-### Note for OSX users
-It seems that even after globaly npm installing js2coffee it will still not be on the path as a
-default. Extending the PATH with `export PATH=/usr/local/share/npm/bin:$PATH` should get you started.
-
 
 ## Usage
 
