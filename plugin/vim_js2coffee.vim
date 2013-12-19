@@ -13,12 +13,12 @@ function! DoConversion(type, selection_or_buffer)
 python << endPython
 from vim_js2coffee import *
 
-def create_new_buffer(file_name, file_type, contents):
+def create_new_buffer(file_name, file_type, file_path):
     vim.command('rightbelow vsplit {0}'.format(file_name))
     vim.command('normal! ggdG')
     vim.command('setlocal filetype={0}'.format(file_type))
     vim.command('setlocal buftype=nowrite')
-    vim.command('call append(0, {0})'.format(contents))
+    vim.command('0read {0}'.format(file_path))
 
 def get_visual_selection():
     buf = vim.current.buffer
@@ -34,13 +34,13 @@ def get_correct_buffer(buffer_type):
 
 def js_to_coffee():
     buf = get_correct_buffer(vim.eval("a:selection_or_buffer"))
-    coffee_script =  get_coffee_from_js_buffer_contents(buf)
-    create_new_buffer("coffee_script_equivalent", "coffee", coffee_script)
+    get_coffee_from_js_buffer_contents(buf)
+    create_new_buffer("coffee_script_equivalent", "coffee", "/tmp/file.coffee")
 
 def coffee_to_js():
     buf = get_correct_buffer(vim.eval("a:selection_or_buffer"))
-    javascript =  get_js_from_coffee_buffer_contents(buf)
-    create_new_buffer("javascript_equivalent", "javascript", javascript)
+    get_js_from_coffee_buffer_contents(buf)
+    create_new_buffer("javascript_equivalent", "javascript", "/tmp/file.js")
 
 if vim.eval("a:type") == "javascript":
     js_to_coffee()

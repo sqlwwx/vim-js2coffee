@@ -9,24 +9,39 @@ COFFEE_FILE = "/tmp/file.coffee"
 ERROR_LOG = "/tmp/error.log"
 
 
+def read_file_to_list(file_to_read):
+    file_contents = []
+    with open(file_to_read, "r") as f:
+        for line in f.readlines():
+            file_contents.append(line)
+        return file_contents
+
+
+def delete_if_present(file_name):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+
+
 class VimJS2CoffeeTests(unittest.TestCase):
 
     def tearDown(self):
-        self.delete_if_present(ERROR_LOG)
-        self.delete_if_present(JS_FILE)
-        self.delete_if_present(COFFEE_FILE)
+        delete_if_present(ERROR_LOG)
+        delete_if_present(JS_FILE)
+        delete_if_present(COFFEE_FILE)
 
     def test_get_coffee_from_js_buffer_contents_return_properly_formatted_coffee_script_when_given_valid_input(self):
         contents = ["var example = function() {\n", "    console.log('This is a different example');\n", "}"]
-        return_result = sut.get_coffee_from_js_buffer_contents(contents)
-        expected_result = ['example = ->', '  console.log "This is a different example"']
-        self.assertEqual(return_result, expected_result)
+        sut.get_coffee_from_js_buffer_contents(contents)
+        expected_result = ['example = ->\n', '  console.log "This is a different example"\n']
+        actual_results = read_file_to_list(COFFEE_FILE)
+        self.assertEqual(actual_results, expected_result)
 
     def test_works_with_nested_quotes(self):
         contents = ["var example = function() {\n", "    console.log(\"This is a 'different' example\");\n", "}"]
-        return_result = sut.get_coffee_from_js_buffer_contents(contents)
-        expected_result = ['example = ->', '  console.log "This is a \"different\" example"']
-        self.assertEqual(return_result, expected_result)
+        sut.get_coffee_from_js_buffer_contents(contents)
+        expected_result = ['example = ->\n', '  console.log "This is a \'different\' example"\n']
+        actual_results = read_file_to_list(COFFEE_FILE)
+        self.assertEqual(actual_results, expected_result)
 
     def test_get_coffee_from_js_buffer_contents_raises_error_when_given_invalid_input(self):
         contents = ["va = oiuewf{}"]
@@ -43,8 +58,8 @@ class VimJS2CoffeeTests(unittest.TestCase):
         contents = ["var example = function() {\n", "    console.log('This is another example');\n", "}"]
         sut.write_buffer_contents_to_file(JS_FILE, contents)
         sut.run_js_to_coffee_on_js_file()
-        expected_coffee_output = 'example = ->\n  console.log "This is another example"\n'
-        self.assertEqual(self.read_file_to_string(COFFEE_FILE), expected_coffee_output)
+        expected_coffee_output = ['example = ->\n', '  console.log "This is another example"\n']
+        self.assertEqual(read_file_to_list(COFFEE_FILE), expected_coffee_output)
 
     def test_run_js_to_coffee_on_js_file_populates_an_error_file_when_given_invalid_javascript(self):
         contents = ["va = oiuewf{}"]
@@ -68,38 +83,31 @@ class VimJS2CoffeeTests(unittest.TestCase):
             with self.assertRaises(Exception):
                 sut.check_for_errors()
 
-    def read_file_to_string(self, file_to_read):
-        with open(file_to_read, "r") as f:
-            return f.read()
-
-    def delete_if_present(self, file_name):
-        if os.path.exists(file_name):
-            os.remove(file_name)
-
 
 class VimCoffee2JSTests(unittest.TestCase):
 
     def tearDown(self):
-        self.delete_if_present(ERROR_LOG)
-        self.delete_if_present(COFFEE_FILE)
-        self.delete_if_present(JS_FILE)
+        delete_if_present(ERROR_LOG)
+        delete_if_present(COFFEE_FILE)
+        delete_if_present(JS_FILE)
 
     def test_get_js_from_coffee_buffer_contents_return_properly_formatted_js_when_given_valid_input(self):
-        contents = ['for name in ["Toran", "Matt", "Brandon", "Joel"]\n', "  console.log(name)"]
-        return_result = sut.get_js_from_coffee_buffer_contents(contents)
+        contents = ['for name in ["Toran", "Matt", "Brandon", "Joel"]\n', '  console.log(name)']
+        sut.get_js_from_coffee_buffer_contents(contents)
         expected_result = [
-            '(function() {',
-            '  var name, _i, _len, _ref;',
-            '',
-            '  _ref = ["Toran", "Matt", "Brandon", "Joel"];',
-            '  for (_i = 0, _len = _ref.length; _i < _len; _i++) {',
-            '    name = _ref[_i];',
-            '    console.log(name);',
-            '  }',
-            '',
-            '}).call(this);'
+            '(function() {\n',
+            '  var name, _i, _len, _ref;\n',
+            '\n',
+            '  _ref = ["Toran", "Matt", "Brandon", "Joel"];\n',
+            '  for (_i = 0, _len = _ref.length; _i < _len; _i++) {\n',
+            '    name = _ref[_i];\n',
+            '    console.log(name);\n',
+            '  }\n',
+            '\n',
+            '}).call(this);\n'
         ]
-        self.assertEqual(return_result, expected_result)
+        actual_results = read_file_to_list(JS_FILE)[1:]
+        self.assertEqual(actual_results, expected_result)
 
     def test_get_js_from_coffee_buffer_contents_raises_error_when_given_invalid_input(self):
         contents = ['for name in ["Toran", "Matt"']
@@ -128,7 +136,7 @@ class VimCoffee2JSTests(unittest.TestCase):
             "\n",
             "}).call(this);\n",
         ]
-        return_value = self.read_file_to_string(JS_FILE)[1:]
+        return_value = read_file_to_list(JS_FILE)[1:]
         self.assertEqual(return_value, expected_js_output)
 
     def test_run_coffee_to_js_on_coffee_file_populates_an_error_file_when_given_invalid_coffeescript(self):
@@ -152,11 +160,3 @@ class VimCoffee2JSTests(unittest.TestCase):
         with self.assertRaises(AssertionError):
             with self.assertRaises(Exception):
                 sut.check_for_errors()
-
-    def read_file_to_string(self, file_to_read):
-        with open(file_to_read, "r") as f:
-            return f.readlines()
-
-    def delete_if_present(self, file_name):
-        if os.path.exists(file_name):
-            os.remove(file_name)
