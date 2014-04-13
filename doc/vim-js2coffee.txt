@@ -1,7 +1,7 @@
 *vim-js2coffee.txt*
 
 ===============================================================================
-CONTENTS                                                 *test-runner-contents*
+CONTENTS
 
 
     1. Intro ............................................ |vim-js2coffee-intro|
