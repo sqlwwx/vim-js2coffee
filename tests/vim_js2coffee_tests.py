@@ -2,7 +2,7 @@ import os
 import stat
 import unittest
 
-import vim_js2coffee as sut
+import autoload.vim_js2coffee as sut
 
 JS_FILE = "/tmp/file.js"
 COFFEE_FILE = "/tmp/file.coffee"
@@ -32,14 +32,14 @@ class VimJS2CoffeeTests(unittest.TestCase):
     def test_get_coffee_from_js_buffer_contents_return_properly_formatted_coffee_script_when_given_valid_input(self):
         contents = ["var example = function() {\n", "    console.log('This is a different example');\n", "}"]
         sut.get_coffee_from_js_buffer_contents(contents)
-        expected_result = ['example = ->\n', '  console.log "This is a different example"\n']
+        expected_result = ['example = ->\n', '  console.log "This is a different example"\n', '  return\n']
         actual_results = read_file_to_list(COFFEE_FILE)
         self.assertEqual(actual_results, expected_result)
 
     def test_works_with_nested_quotes(self):
         contents = ["var example = function() {\n", "    console.log(\"This is a 'different' example\");\n", "}"]
         sut.get_coffee_from_js_buffer_contents(contents)
-        expected_result = ['example = ->\n', '  console.log "This is a \'different\' example"\n']
+        expected_result = ['example = ->\n', '  console.log "This is a \'different\' example"\n', '  return\n']
         actual_results = read_file_to_list(COFFEE_FILE)
         self.assertEqual(actual_results, expected_result)
 
@@ -58,7 +58,7 @@ class VimJS2CoffeeTests(unittest.TestCase):
         contents = ["var example = function() {\n", "    console.log('This is another example');\n", "}"]
         sut.write_buffer_contents_to_file(JS_FILE, contents)
         sut.run_js_to_coffee_on_js_file()
-        expected_coffee_output = ['example = ->\n', '  console.log "This is another example"\n']
+        expected_coffee_output = ['example = ->\n', '  console.log "This is another example"\n', '  return\n']
         self.assertEqual(read_file_to_list(COFFEE_FILE), expected_coffee_output)
 
     def test_run_js_to_coffee_on_js_file_populates_an_error_file_when_given_invalid_javascript(self):
