@@ -66,3 +66,5 @@ your vimrc:
     nnoremap<Leader>sc :CoffeeSelection2JS<CR>
     nnoremap<Leader>bj :JSBuffer2Coffee<CR>
     nnoremap<Leader>bs :JSSelection2Coffee<CR>
+
+" vim: ft=help"
